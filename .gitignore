@@ -1,0 +1,9 @@
+*.xml
+*.gcda
+*.gcno
+*.cswi
+*.stderr
+*.stdout
+*.lexch
+*.npp
+*.xml~
