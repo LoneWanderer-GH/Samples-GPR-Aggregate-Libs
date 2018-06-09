@@ -1,0 +1,23 @@
+with "../Production_Options/Production_Options.gpr";
+
+project InterfaceC is
+
+   Interface_Files := "src";
+   Interface_Name := "InterfaceC";
+   for Source_Dirs use (Interface_Files);
+
+   package Naming renames Production_Options.Naming;
+
+   package Ide renames Production_Options.Ide;
+
+   package Pretty_Printer renames Production_Options.Pretty_Printer;
+
+   package Builder renames Production_Options.Builder;
+
+   package Compiler renames Production_Options.Compiler;
+
+   package Binder renames Production_Options.Binder;
+
+   package Documentation renames Production_Options.Documentation;
+
+end InterfaceC;

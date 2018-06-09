@@ -1,0 +1,267 @@
+
+project Production_Options is
+
+   for Source_Dirs use ();
+
+   Indentation := "3";
+   Line_Length := "132";
+
+   package Builder is
+      for Switches ("ada") use
+       ("-j0",
+        "-g",
+        "-C",
+        "-s");
+   end Builder;
+
+   package Compiler is
+      Compilation_Options :=
+       ("-O3",
+        "-gnato",
+        "-fstack-check",
+        "-fPIC",
+        "-ftest-coverage",
+        "-fprofile-arcs",
+        "-fprofile-arcs",
+        "-g",
+        "-gnat12"
+       );
+
+      Warnings_Options :=
+       ("-gnatwe.kkutm.ccf.hh.rr.p.ol.l",
+        "-gnatf");
+
+      Style_Checks :=
+       (--           "-gnaty" & Indentation, -- If a digit from 1-9 appears in the string after -gnaty then proper indentation is checked, with the digit indicating the indentation level required. A value of zero turns off this style check. The general style of required indentation is as specified by the examples in the Ada Reference Manual. Full line comments must be aligned with the -- starting on a column that is a multiple of the alignment level, or they may be aligned the same way as the following non-blank line (this is useful when full line comments appear in the middle of a statement, or they may be aligned with the source line on the previous non-blank line.
+        --           "-gnatya", -- Attribute names, including the case of keywords such as digits used as attributes names, must be written in mixed case, that is, the initial letter and any letter following an underscore must be uppercase. All other letters must be lowercase.
+        --           "-gnatyA", -- When using the array attributes First, Last, Range, or Length, the index number must be omitted for one-dimensional arrays and is required for multi-dimensional arrays.
+        --           "-gnatyb", -- Trailing blanks are not allowed at the end of statements. The purpose of this rule, together with h (no horizontal tabs), is to enforce a canonical format for the use of blanks to separate source tokens.
+        --           "-gnatyB", -- The use of AND/OR operators is not permitted except in the cases of modular operands, array operands, and simple stand-alone boolean variables or boolean constants. In all other cases and then/or else are required.
+        --           "-gnatyc",
+        --           -- Comments must meet the following set of rules:
+        --           --  * The -- that starts the column must either start in column one, or else at least one blank must precede this sequence.
+        --           --  * Comments that follow other tokens on a line must have at least one blank following the -- at the start of the comment.
+        --           --  * Full line comments must have at least two blanks following the -- that starts the comment, with the following exceptions.
+        --           --  * A line consisting only of the -- characters, possibly preceded by blanks is permitted.
+        --           --  * A comment starting with --x where x is a special character is permitted. This allows proper processing of the output from specialized tools such as gnatprep (where --! is used) and in earlier versions of the SPARK annotation language (where --# is used). For the purposes of this rule, a special character is defined as being in one of the ASCII ranges 16#21#...16#2F# or 16#3A#...16#3F#. Note that this usage is not permitted in GNAT implementation units (i.e., when -gnatg is used).
+        --           --  * A line consisting entirely of minus signs, possibly preceded by blanks, is permitted. This allows the construction of box comments where lines of minus signs are used to form the top and bottom of the box.
+        --           --  * A comment that starts and ends with -- is permitted as long as at least one blank follows the initial --. Together with the preceding rule, this allows the construction of box comments, as shown in the following example:
+        --           --  ---------------------------
+        --           --  -- This is a box comment --
+        --           --  -- with two text lines.  --
+        --           --  ---------------------------
+        --
+        --           --"-gnatyd", -- All lines must be terminated by a single ASCII.LF character (in particular the DOS line terminator sequence CR/LF is not allowed)
+        --           "-gnatye", -- Optional labels on end statements ending subprograms and on exit statements exiting named loops, are required to be present.
+        --           "-gnatyf", -- Neither form feeds nor vertical tab characters are permitted in the source text.
+        --           "-gnatyh", -- Horizontal tab characters are not permitted in the source text. Together with the b (no blanks at end of line) check, this enforces a canonical form for the use of blanks to separate source tokens.
+        --           "-gnatyi", -- The keyword then must appear either on the same line as corresponding if, or on a line on its own, lined up under the if.
+        --           "-gnatyk", -- All keywords must be in lower case (with the exception of keywords such as digits used as attribute names to which this check does not apply).
+        --           "-gnatyl",
+        --           --  Layout of statement and declaration constructs must follow the recommendations in the Ada Reference Manual, as indicated by the form of the syntax rules. For example an else keyword must be lined up with the corresponding if keyword.
+        --           --
+        --           --  There are two respects in which the style rule enforced by this check option are more liberal than those in the Ada Reference Manual. First in the case of record declarations, it is permissible to put the record keyword on the same line as the type keyword, and then the end in end record must line up under type. This is also permitted when the type declaration is split on two lines. For example, any of the following three layouts is acceptable:
+        --           --
+        --           --  type q is record
+        --           --     a : integer;
+        --           --     b : integer;
+        --           --  end record;
+        --           --
+        --           --  type q is
+        --           --     record
+        --           --        a : integer;
+        --           --        b : integer;
+        --           --     end record;
+        --           --
+        --           --  type q is
+        --           --     record
+        --           --        a : integer;
+        --           --        b : integer;
+        --           --  end record;
+        --           --  Second, in the case of a block statement, a permitted alternative is to put the block label on the same line as the declare or begin keyword, and then line the end keyword up under the block label. For example both the following are permitted:
+        --           --
+        --           --  Block : declare
+        --           --     A : Integer := 3;
+        --           --  begin
+        --           --     Proc (A, A);
+        --           --  end Block;
+        --           --
+        --           --  Block :
+        --           --     declare
+        --           --        A : Integer := 3;
+        --           --     begin
+        --           --        Proc (A, A);
+        --           --     end Block;
+        --           --  The same alternative format is allowed for loops. For example, both of the following are permitted:
+        --           --
+        --           --  Clear : while J < 10 loop
+        --           --     A (J) := 0;
+        --           --  end loop Clear;
+        --           --
+        --           --  Clear :
+        --           --     while J < 10 loop
+        --           --        A (J) := 0;
+        --           --     end loop Clear;
+        --
+        --           "-gnatyL5", -- The maximum level of nesting of constructs (including subprograms, loops, blocks, packages, and conditionals) may not exceed the given value `nnn'. A value of zero disconnects this style check.
+        --           "-gnatym" & Line_Length,
+        --           -- The length of source lines must not exceed 79 characters, including any trailing blanks.
+        --           -- The Value of 79 Allows Convenient Display On An 80 Character Wide Device or Window, Allowing for Possible Special
+        --           -- Treatment of 80 Character Lines. Note That This Count is of Characters in The Source Text.
+        --           -- This Means That A Tab Character Counts As One Character in This Count and A Wide Character Sequence Counts As A Single
+        --           -- Character (However Many Bytes Are Needed in The Encoding).
+        --           "-gnatyM" & Line_Length,
+        --           -- The length of lines must not exceed the given value `nnn'. The maximum value that can be specified is 32767.
+        --           -- If Neither Style Option for Setting The Line Length is Used, then The Default is 255.
+        --           -- This Also Controls The Maximum Length of Lexical Elements, Where The Only Restriction is That They Must Fit On A Single Line.
+        --
+        --           "-gnatyn", -- Any identifier from Standard must be cased to match the presentation in the Ada Reference Manual (for example, Integer and ASCII.NUL).
+        --           "-gnatyO", -- Check that overriding subprograms are explicitly marked as such.
+        --           "-gnatyp", -- Check pragma casing. Pragma names must be written in mixed case, that is, the initial letter and any letter following an underscore must be uppercase. All other letters must be lowercase. An exception is that SPARK_Mode is allowed as an alternative for Spark_Mode.
+        "-gnatyy",
+        -- Set all standard style check options.
+        -- This is equivalent to gnaty3aAbcefhiklmnprst, that is all checking options enabled with the exception of -gnatyB, -gnatyd, -gnatyI, -gnatyLnnn, -gnatyo, -gnatyO, -gnatyS, -gnatyu, and -gnatyx.
+
+        "-gnaty+", -- following switches replace -gnatyy set of values
+        "-gnatyM" & Line_Length, -- line length to 132
+        "-gnatyM" & Line_Length,
+        "-gnatyd"--, -- All lines must be terminated by a single ASCII.LF character (in particular the DOS line terminator sequence CR/LF is not allowed)
+
+        --""
+       );
+      Validity_Checks :=
+       ("");
+
+      for Default_Switches ("ada") use
+       Compilation_Options
+       & Warnings_Options
+       & Style_Checks
+       & Validity_Checks;
+   end Compiler;
+
+   package Binder is
+      for Switches ("ada") use
+       ("-E");
+   end Binder;
+
+   package Linker is
+      for Switches ("ada") use
+       ("-g",
+        "-fprofile-generate",
+        "-fprofile-generate",
+        "-fprofile-generate",
+        "-fprofile-generate",
+        "-fprofile-generate",
+        "--coverage"
+       );
+   end Linker;
+
+   package Ide is
+      for Artifacts_Dir use "artifacts";
+      for Documentation_Dir use "doc";
+   end Ide;
+
+   package Naming is
+      for Casing               use "MixedCase";
+      for Dot_Replacement      use "-";
+      for Spec_Suffix ("Ada")  use ".ads";
+      for Body_Suffix ("Ada")  use ".adb";
+   end Naming;
+
+   package Pretty_Printer is
+      for Default_Switches ("ada") use
+       ("-A1", -- Align : in declarations
+        "-A2", -- Align := in initializations in declarations
+        "-A3", -- Align := in assignment statements
+        "-A4", -- Align => in associations
+        "-A5", -- Align at keywords in the component clauses in record representation clauses
+
+        "-pM",     -- pragmas are Mixed case (style check above)
+
+        "-neD",    -- Names introduced by type and subtype declarations are always cased as they appear in the declaration in the source file. Overrides -n casing setting.
+
+        --"-c0", -- All the comments remain unchanged
+        --"-c1", -- GNAT-style comment line indentation (this is the default).
+        "-c2", -- Reference-manual comment line indentation.
+        --"-c3", -- GNAT-style comment beginning
+        "-c4", -- Reformat comment blocks
+        --"-c5", -- Keep unchanged special form comments
+
+        "--call_threshold=1",  -- If the number of parameter associations is greater than nnn and if at least one association uses named notation, start each association from a new line. If nnn is 0, no check for the number of associations is made, this is the default.
+        "--par_threshold=1", -- If the number of parameter specifications is greater than nnn (or equal to nnn in case of a function), start each specification from a new line. The default for nnn is 3.
+
+        "--eol=lf",
+        -- Specifies the format of the reformatted output file. The xxx string specified with the switch may be either
+        -- "dos" MS DOS style, lines end with CR LF characters
+        -- "crlf" the same as crlf
+        -- "unix" UNIX style, lines end with LF character
+        -- "lf" the same as unix
+
+        "--use-on-new-line",
+        "--separate-stmt-name",
+        "--no-separate-is",
+        "--separate-loop-then",
+        --"-nM",
+        "-i" & Indentation, -- indent 3
+        "-cl" & "1", -- continuation indent 1
+        "-N", -- no tabs
+        "-M" & Line_Length
+       );
+   end Pretty_Printer;
+
+   --     package Documentation is
+   --     end Documentation;
+
+   package Clean is
+      --Switches : list, configuration concatenable
+      --Value is a list of switches to be used by the cleaning application.
+      for Switches use
+       (
+        "-f", -- force
+        "-c", -- Only delete compiler-generated files. Do not delete executables and libraries.
+        "-r"--, -- recursive on all projects
+        --"-F", -- Display full project path name in brief error messages
+        --"-n", -- Do not delete files, only list files to delete
+        --"-q", -- Be quiet/terse. There is no output, except to report problems.
+        --"-v", -- Verbose mode
+        --"-Xnm=val" -- Specify an external reference for Project Files (scenario variables ?)
+       );
+
+      --Source_Artifact_Extensions : list, indexed, case-insensitive index
+      --Index is a language names. Value is the list of extensions for file names derived from object file names that need to be cleaned in the object directory of the project.
+
+      --Object_Artifact_Extensions : list, indexed, case-insensitive index
+      --Index is a language names. Value is the list of extensions for file names derived from source file names that need to be cleaned in the object directory of the project.
+
+      --Artifacts_In_Object_Dir : single
+      --Value is a list of file names expressed as regular expressions that are to be deleted by gprclean in the object directory of the project.
+
+      --Artifacts_In_Exec_Dir : single
+      --Value is list of file names expressed as regular expressions that are to be deleted by gprclean in the exec directory of the main project.
+   end Clean;
+
+--     Install_Root      := "../INSTALL_BUILDS/";
+--     Install_Root_Exe  := Install_Root & "EXECUTABLES/";
+--     Install_Root_Libs := Install_Root & "LIBS/";
+--
+--     Install_Bin_Dir   := "/BIN";
+--     Install_Ali_Dir   := "/ALI";
+--     Install_Src_Dir   := "/SRC";
+
+
+
+   package Install is
+      Install_Root := project'Project_Dir & "../INSTALL_BUILDS/";
+      Install_Exe  := "EXECUTABLES/";
+      Install_Libs := "LIBS/";
+      Install_Root_Exe  := Install_Root & Install_Exe;
+      Install_Root_Libs := Install_Root & Install_Libs;
+      for Prefix         use Install_Root;
+      for Exec_Subdir    use "EXE";
+      for Lib_Subdir     use "BIN";
+      for Ali_Subdir     use "ALI";
+      for Sources_Subdir use "SRC";
+      for Project_Subdir use "GPR";
+   end Install;
+
+end Production_Options;

@@ -1,0 +1,9 @@
+
+project InterfaceA is
+
+   Interface_Files := (project'Project_Dir & "src");
+   Interface_Name  := "InterfaceA";
+
+   for Source_Dirs use ();
+
+end InterfaceA;

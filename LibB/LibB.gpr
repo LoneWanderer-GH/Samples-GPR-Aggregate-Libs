@@ -1,0 +1,37 @@
+with "../Production_Options/Production_Options.gpr";
+
+--with "../InterfaceA/InterfaceA.gpr";
+with "../InterfaceB/InterfaceB.gpr";
+
+with "../LibA/LibA.gpr";
+
+project LibB is
+
+   for Source_Dirs use ("src");
+   for Object_Dir use "obj";
+
+   for Library_Name      use "LibB";
+   for Library_Dir       use "Library";
+   for Library_Ali_Dir   use "Library_Ali";
+   for Library_Src_Dir   use "Public_Interfaces";
+   for Library_Interface use InterfaceB'Library_Interface; --; --("InterfaceB");
+
+   for Library_Kind use "static";
+
+   package Naming renames Production_Options.Naming;
+
+   package Ide renames Production_Options.Ide;
+
+   package Pretty_Printer renames Production_Options.Pretty_Printer;
+
+   package Builder renames Production_Options.Builder;
+
+   package Compiler renames Production_Options.Compiler;
+
+   package Binder renames Production_Options.Binder;
+
+   package Documentation renames Production_Options.Documentation;
+
+   package Clean renames Production_Options.Clean;
+
+end LibB;

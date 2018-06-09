@@ -1,0 +1,38 @@
+
+with "../Production_Options/Production_Options.gpr";
+
+with "../LibA/LibA.gpr";
+--with "../LibB/LibB.gpr";
+with "../LibC/LibC.gpr";
+
+-- includes needed
+--with "../InterfaceA/InterfaceA.gpr";
+--with "../InterfaceC/InterfaceC.gpr";
+
+-- full impl
+--with "../LibFull/LibFull.gpr";
+
+project Exe1 is
+
+   for Source_Dirs use ("src");
+   for Object_Dir  use "obj";
+   for Exec_Dir    use "exec";
+   for Main use ("mainexe1.adb");
+
+   package Naming renames Production_Options.Naming;
+
+   package Ide renames Production_Options.Ide;
+
+   package Pretty_Printer renames Production_Options.Pretty_Printer;
+
+   package Builder renames Production_Options.Builder;
+
+   package Compiler renames Production_Options.Compiler;
+
+   package Binder renames Production_Options.Binder;
+
+   package Documentation renames Production_Options.Documentation;
+
+   package Clean renames Production_Options.Clean;
+
+end Exe1;
